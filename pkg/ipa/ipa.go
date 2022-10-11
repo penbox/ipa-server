@@ -195,6 +195,10 @@ func parseIconImage(iconFile *zip.File) (image.Image, error) {
 	img, err := png.Decode(buf)
 	if err != nil {
 		// try fix to std png
+		if _, err := buf.Seek(0, 0); err != nil {
+			return nil, err
+		}
+
 		cgbi, err := ipaPng.Decode(buf)
 		if err != nil {
 			return nil, err
@@ -224,4 +228,5 @@ func parseIconAssets(assetFile *zip.File) (image.Image, error) {
 		return nil, err
 	}
 	return a.Image("AppIcon")
+
 }
